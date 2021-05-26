@@ -6,48 +6,44 @@
 
 #include <stdio.h>
 
+int divide_by_two = 0;
+
 int gcd(int a, int b)
 {
+    int check_a_even = 0, check_b_even = 0;
+
+    check_a_even = (a & 1) == 0;
+    check_b_even = (b & 1) == 0;
+
+    // base case (E2)
+    if (a == b)
+        return a << divide_by_two;
+
     // a and b are even (BG1)
-    if (((a & 1) == 0) && ((b & 1) == 0))
+    else if (check_a_even && check_b_even)
     {
         // a and b shift right 1 bit
-        a = a >> 1;
-        b = b >> 1;
-        return gcd(a, b);
+        divide_by_two += 1;
+        return gcd(a >> 1, b >> 1);
     }
 
     // a is even, b is odd (BG2)
-    else if (((a & 1) == 0) && ((b & 1) != 0))
-    {
+    else if (check_a_even)
         // a shifts right 1 bit
-        a = a >> 1;
-        return gcd(a, b);
-    }
+        return gcd(a >> 1, b);
 
     // a is odd, b is even (BG2)
-    else if (((a & 1) != 0) && ((b & 1) == 0))
-    {
+    else if (check_b_even)
         // b shifts right 1 bit
-        b = b >> 1;
-        return gcd(a, b);
-    }
+        return gcd(a, b >> 1);
 
-    // a and b are odd
+    // a is greater (E1)
+    else if (a > b)
+        return gcd(a - b, b);
+
+    // b is greater (E1)
     else
-    {
-        // base case (E2)
-        if (a == b)
-            return a;
-
-        // a is greater (E1)
-        else if (a > b)
-            return gcd(a - b, b);
-
-        // b is greater (E1)
-        else
-            return gcd(a, b - a);
-    }
+        return gcd(a, b - a);
 }
 
 int main(void)
