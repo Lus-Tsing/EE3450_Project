@@ -21,11 +21,11 @@ int main(void)
     {
         // a is greater
         if (a > b)
-            a -= b;
+            a -= b; // a is greater, a = a - b
 
         // b is greater
         else
-            b -= a;
+            b -= a; // b is greater, b = b - a
     }
 
     printf("The greatest common divisor is %d\n", a);

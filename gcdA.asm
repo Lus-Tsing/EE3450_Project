@@ -25,12 +25,15 @@ main:
 	li		$v0, 5 			# prepare syscall 5 (get int)
 	syscall
     move	$s1, $v0
-	
+
+	################################################
+
 	# TODO
-	move	$a0, $s0
-	move	$a1, $s1
+	move	$a0, $s0		# transfer a into function
+	move	$a1, $s1		# transfer b into function
 	jal		gcd				# jump to gcd and save position to $ra
 
+	################################################
 
 	li		$v0, 4 			# prepare syscall 4 (print string)
 	la		$a0, msg2 		# argument: msg2 
@@ -47,34 +50,29 @@ exit:
 	syscall 				# Exit
 
 gcd:
-	beq		$a0, $a1, ret_same
-	bgt		$a0, $a1, ret_a_bigger
-	bgt		$a1, $a0, ret_b_bigger
+	beq		$a0, $a1, ret_same		# whether a = b
+	bgt		$a0, $a1, ret_a_bigger	# whether a > b
 
-ret_same:
-	move	$s0, $a0
+ret_b_bigger:						# else : a < b
+	addi	$sp, $sp, -4			# make room for stack push. we must do this before recursive call.
+	sub		$a1, $a1, $a0			# b = b - a
+	sw		$ra, 0($sp)				# push return address to the stack.
+	jal		gcd						# do recursive
+	lw		$ra, 0($sp)				# pop return address from the stack.
+	addi	$sp, $sp, 4				# restore the stack
 	j		ret						# jump to ret
 
 ret_a_bigger:
 	addi	$sp, $sp, -4			# make room for stack push. we must do this before recursive call.
 	sub		$a0, $a0, $a1			# a = a - b
 	sw		$ra, 0($sp)				# push return address to the stack.
-	jal		gcd
+	jal		gcd						# do recursive
 	lw		$ra, 0($sp)				# pop return address from the stack.
 	addi	$sp, $sp, 4				# restore the stack
 	j		ret						# jump to ret
 	
-
-ret_b_bigger:
-	addi	$sp, $sp, -4			# make room for stack push. we must do this before recursive call.
-	sub		$a1, $a1, $a0			# b = b - a
-	sw		$ra, 0($sp)				# push return address to the stack.
-	jal		gcd
-	lw		$ra, 0($sp)				# pop return address from the stack.
-	addi	$sp, $sp, 4				# restore the stack
-	j		ret						# jump to ret
-
+ret_same:
+	move	$s0, $a0				# return answer
 
 ret:
-	jr		$ra					# jump to $ra
-		
+	jr		$ra						# jump to $ra

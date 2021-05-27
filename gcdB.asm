@@ -28,7 +28,17 @@ main:
 
     ###########################
     #
-	jal while
+	while:
+		bgt $s0, $s1, a_big			# whether a > b
+
+		# else, b is greater
+		sub	$s1, $s1, $s0			# b is greater, b = b - a
+		bne $s0, $s1, while			# if a != b, do again
+		add $s0, $s0, $s1
+
+	a_big:
+		sub	$s0, $s0, $s1			# a is greater, a = a - b
+		bne $s0, $s1, while			# if a != b, do again
     #
     ###########################
 
@@ -46,24 +56,4 @@ exit:
 	syscall 		# Exit
 	
 
-while:
-	beq $s0 $s1 equal
-	bgt $s0 $s1 a_big
-	bgt $s1 $s0 b_big
-
-equal:
-	jr			$ra					# jump to $ra
-
-a_big:
-	sub		$s0 $s0 $s1
-	j		while				# jump to while
-	
-b_big:
-	sub		$s1 $s1 $s0
-	j		while				# jump to while
-	
-
-	
-
-	
 
