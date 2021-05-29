@@ -8,15 +8,15 @@
 
 int gcd(int a, int b)
 {
-    // base case
+    // base case a = b, then return answer
     if (a == b)
         return a;
 
-    // a is greater
+    // a is greater, a = a - b, do recursive
     else if (a > b)
         return gcd(a - b, b);
 
-    // b is greater
+    // b is greater, b = b - a, do recursive
     else
         return gcd(a, b - a);
 }

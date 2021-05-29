@@ -9,31 +9,31 @@
 int gcd(int a, int b)
 {
     // variables to store the judgements
-    int check_a_even = 0, check_b_even = 0;
+    int a_even = 0, b_even = 0;
 
-    check_a_even = (a & 1) == 0; // if a is even, check_a_even = 1, odd = 0
-    check_b_even = (b & 1) == 0; // if b is even, check_b_even = 1, odd = 0
-
-    // base case : a = b (E2)
-    if (a == b)
-        return a;
+    a_even = (a & 1) == 0; // if a is even, a_even = 1, odd = 0
+    b_even = (b & 1) == 0; // if b is even, b_even = 1, odd = 0
 
     // a and b are even (BG1)
-    else if (check_a_even && check_b_even)
-    {
+    if (a_even && b_even)
         // a and b shift right 1 bit
         return gcd(a >> 1, b >> 1) << 1;
-    }
 
     // a is even, b is odd (BG2)
-    else if (check_a_even)
+    else if (a_even)
         // a shifts right 1 bit
         return gcd(a >> 1, b);
 
     // a is odd, b is even (BG2)
-    else if (check_b_even)
+    else if (b_even)
         // b shifts right 1 bit
         return gcd(a, b >> 1);
+
+    // If jump into the following 3 else if statement
+    // a, b are odd numbers
+    // base case : a = b (E2), and a, b are odd
+    else if (a == b)
+        return a;
 
     // a is greater (E1)
     else if (a > b)

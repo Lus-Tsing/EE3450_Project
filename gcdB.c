@@ -17,6 +17,8 @@ int main(void)
     scanf("%d", &b);
 
     // Eluclid's algorithm until a = b
+    // Go into the loop, only when a != b
+    // If a = b, ignore the loop bottom
     while (a != b)
     {
         // a is greater

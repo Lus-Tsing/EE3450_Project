@@ -28,32 +28,37 @@ main:
 
     ###########################
     #
-	while:
-		bgt $s0, $s1, a_big			# whether a > b
+	beq	$s0, $s1, endloop		# if a == b jump to endloop
+	
+while:
+	bgt $s0, $s1, a_big			# whether a > b
 
-		# else, b is greater
-		sub	$s1, $s1, $s0			# b is greater, b = b - a
-		bne $s0, $s1, while			# if a != b, do again
-		add $s0, $s0, $s1
+	# else, b is greater
+	sub	$s1, $s1, $s0			# b is greater, b = b - a
+	bne $s0, $s1, while			# if a != b, do again
+	beq	$s0, $s1, endloop		# if a == b jump to endloop
 
-	a_big:
-		sub	$s0, $s0, $s1			# a is greater, a = a - b
-		bne $s0, $s1, while			# if a != b, do again
+a_big:
+	sub	$s0, $s0, $s1			# a is greater, a = a - b
+	bne $s0, $s1, while			# if a != b, do again
     #
     ###########################
 
-	li $v0, 4 		# prepare syscall 4 (print string)
-	la $a0, msg2 	# argument: msg2 
+endloop:
+	li $v0, 4 			# prepare syscall 4 (print string)
+	la $a0, msg2 		# argument: msg2 
 	syscall
 
-	li $v0, 1 		# prepare syscall 1 (print int)
-	move $a0, $s0 	# argument: gcd value
+	li $v0, 1 			# prepare syscall 1 (print int)
+	move $a0, $s0 		# argument: gcd value
 	syscall
 
 exit:
 
-	li $v0, 10 		# terminate program run and
-	syscall 		# Exit
+	li $v0, 10 			# terminate program run and
+	syscall 			# Exit
 	
 
 
+
+	
